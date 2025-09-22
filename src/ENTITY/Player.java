@@ -38,6 +38,12 @@ public class Player {
         if (keyHandler.rightPressed == true) {
             playerX += speed;
         }
+        if (playerX < 0) {
+            playerX = 0;
+        }
+        if (playerX > 576 - width) {
+            playerX = 576 - width;
+        }
     }
     public void draw(Graphics2D g2) {
         g2.setColor(Color.black);
