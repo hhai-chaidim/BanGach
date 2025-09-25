@@ -1,10 +1,13 @@
 package MAIN;
 
 import ENTITY.Ball;
+import ENTITY.Brick;
 import ENTITY.Player;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class GamePanel extends JPanel implements Runnable {
     final int originalTileSize = 16;
@@ -21,7 +24,8 @@ public class GamePanel extends JPanel implements Runnable {
     KeyHandler keyHandler = new KeyHandler();
     Thread gameThread;
     Player player = new Player(this, keyHandler);
-    Ball ball = new Ball(this, player);
+    ArrayList<Brick> bricks = Brick.createBricks();
+    Ball ball = new Ball(this, player, bricks);
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -62,6 +66,8 @@ public class GamePanel extends JPanel implements Runnable {
         if (keyHandler.spacePressed && !ball.ballActived) {
             ball.activeBall();
         }
+        updateBricks();
+
     }
     public void paintComponent (Graphics g) {
         super.paintComponent(g);
@@ -69,6 +75,20 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g;
         player.draw(g2);
         ball.draw(g2);
+        for(Brick brick : bricks) {
+            brick.draw(g2);
+        }
         g2.dispose();
     }
+
+    public void updateBricks() {
+        Iterator<Brick> iterator = bricks.iterator();
+        while (iterator.hasNext()) {
+            Brick brick = iterator.next();
+            if (!brick.isVisible()) {
+                iterator.remove();
+            }
+        }
+    }
+
 }

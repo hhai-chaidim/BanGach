@@ -3,10 +3,12 @@ package ENTITY;
 import MAIN.GamePanel;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Ball {
     GamePanel gp;
     Player player;
+    ArrayList<Brick> bricks;
 
     int ballX;
     int ballY;
@@ -16,10 +18,16 @@ public class Ball {
 
     public boolean ballActived = false;
 
-    public Ball(GamePanel gp, Player player) {
+    public Ball(GamePanel gp, Player player, ArrayList<Brick> bricks) {
         this.gp = gp;
         this.player = player;
+        this.bricks = bricks;
         resetBall();
+    }
+
+    public void setSpeed(int x) {
+        speedX = x;
+        speedY = x;
     }
 
     public void resetBall() {
@@ -66,6 +74,31 @@ public class Ball {
             System.out.println("Ball fell down! Resetting ball...");
             resetBall();
         }
+
+        for (Brick brick : bricks) {
+            Rectangle ballRect = new Rectangle(ballX, ballY, diameter, diameter);
+            Rectangle brickRect = brick.getBounds();
+
+            if (ballRect.intersects(brickRect)) {
+                int ballCenterX = ballX + diameter / 2;
+                int ballCenterY = ballY + diameter / 2;
+
+                boolean hitFromLeft = ballCenterX < brick.x;
+                boolean hitFromRight = ballCenterX > brick.x + brick.width;
+                boolean hitFromTop = ballCenterY < brick.y;
+                boolean hitFromBottom = ballCenterY > brick.y + brick.height;
+
+                if (hitFromTop || hitFromBottom) {
+                    speedY = -speedY;
+                } else if (hitFromLeft || hitFromRight) {
+                    speedX = -speedX;
+                } else {
+                    speedX = -speedX;
+                    speedY = -speedY;
+                }
+                brick.setVisible(false);
+            }
+        }
     }
 
     public void activeBall() {
@@ -78,4 +111,5 @@ public class Ball {
         g2.setColor(Color.RED);
         g2.fillOval(ballX, ballY, diameter, diameter);
     }
+
 }
