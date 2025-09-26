@@ -3,6 +3,9 @@ package MAIN;
 import ENTITY.Ball;
 import ENTITY.Brick;
 import ENTITY.Player;
+import OBJECTS.OBJ_Heart;
+import OBJECTS.SuperObject;
+import TILE.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,19 +16,23 @@ public class GamePanel extends JPanel implements Runnable {
     final int originalTileSize = 16;
     final int scale = 3;
 
-    final int tileSize  = originalTileSize * scale;
-    final int maxScreenCol = 12;
-    final int maxScreenRow = 16;
+    public final int tileSize  = originalTileSize * scale;
+    public final int maxScreenCol = 12;
+    public final int maxScreenRow = 16;
     public final int screenWidth  = tileSize * maxScreenCol;
     public final int screenHeight = tileSize * maxScreenRow;
 
     int FPS = 60;
 
-    KeyHandler keyHandler = new KeyHandler();
+    TileManager tileManager = new TileManager(this);
+    KeyHandler keyHandler = new KeyHandler(this);
     Thread gameThread;
     Player player = new Player(this, keyHandler);
     ArrayList<Brick> bricks = Brick.createBricks();
     Ball ball = new Ball(this, player, bricks);
+    OBJ_Heart objHeart = new OBJ_Heart(this, player);
+    public AssetSetter assetSetter = new AssetSetter(this);
+
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -33,6 +40,10 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
         this.addKeyListener(keyHandler);
         this.setFocusable(true);
+    }
+
+    public void setupGame() {
+        assetSetter.setObject();
     }
 
     public void startGameThread() {
@@ -73,11 +84,16 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
 
         Graphics2D g2 = (Graphics2D) g;
+
+        tileManager.draw(g2);
+
         player.draw(g2);
         ball.draw(g2);
         for(Brick brick : bricks) {
             brick.draw(g2);
         }
+
+        OBJ_Heart.drawHearts(g2);
         g2.dispose();
     }
 

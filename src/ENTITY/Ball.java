@@ -71,8 +71,14 @@ public class Ball {
             speedY = -speedY;
         }
         if (ballY >= gp.screenHeight - diameter) {
-            System.out.println("Ball fell down! Resetting ball...");
-            resetBall();
+            player.playerLives--;
+
+            if (player.playerLives <= 0) {
+                speedX = 0;
+                speedY = 0;
+            } else {
+                resetBall();
+            }
         }
 
         for (Brick brick : bricks) {

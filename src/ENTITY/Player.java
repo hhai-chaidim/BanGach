@@ -11,6 +11,7 @@ public class Player {
     int width;
     int height;
     int speed;
+    public int playerLives;
 
     GamePanel gp;
     KeyHandler keyHandler;
@@ -29,6 +30,7 @@ public class Player {
         this.width = 64;
         this.height = 8;
         this.speed = 4;
+        this.playerLives = 3;
     }
 
     public void update() {
