@@ -5,6 +5,8 @@ import MAIN.GamePanel;
 import java.awt.*;
 import java.util.ArrayList;
 
+import static java.lang.Math.max;
+
 public class Ball {
     GamePanel gp;
     Player player;
@@ -74,8 +76,7 @@ public class Ball {
             player.playerLives--;
 
             if (player.playerLives <= 0) {
-                speedX = 0;
-                speedY = 0;
+                gp.gameQuit();
             } else {
                 resetBall();
             }
@@ -111,6 +112,36 @@ public class Ball {
         if (!ballActived) {
             ballActived = true;
         }
+    }
+
+    public void addExtraBall() {
+        Ball newBall = new Ball(gp, player, bricks);
+        newBall.ballX = this.ballX;
+        newBall.ballY = this.ballY;
+        newBall.ballActived = true;
+        newBall.speedX = -this.speedX;
+        newBall.speedY = this.speedY;
+
+        System.out.println("Spawn thêm 1 bóng mới!");
+    }
+
+    public void slowDownBall() {
+        int originalSpeedX = this.speedX;
+        int originalSpeedY = this.speedY;
+
+        this.speedX = this.speedX / 2;
+        this.speedY = this.speedY / 2;
+
+        new Thread(() -> {
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            this.speedX = originalSpeedX;
+            this.speedY = originalSpeedY;
+            System.out.println("Ball trở lại bình thường!");
+        }).start();
     }
 
     public void draw(Graphics2D g2) {

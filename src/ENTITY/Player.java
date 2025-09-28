@@ -6,11 +6,11 @@ import MAIN.KeyHandler;
 import java.awt.*;
 
 public class Player {
-    int playerX;
-    int playerY;
-    int width;
-    int height;
-    int speed;
+    public int playerX;
+    public int playerY;
+    public int width;
+    public int height;
+    public int speed;
     public int playerLives;
 
     GamePanel gp;
@@ -22,6 +22,14 @@ public class Player {
         this.keyHandler = keyHandler;
 
         setDefaultValues();
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
     }
 
     public void setDefaultValues() {
@@ -47,6 +55,30 @@ public class Player {
             playerX = 576 - width;
         }
     }
+
+    public void enlargePlayer() {
+        int originalWidth = this.width;
+        this.width += 50; // Tăng thêm 50px
+
+        System.out.println("Player to ra!");
+
+        // Sau 10 giây quay về kích thước ban đầu
+        new Thread(() -> {
+            try {
+                Thread.sleep(10000); // 10 giây
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            this.width = originalWidth;
+            System.out.println("Player trở lại bình thường!");
+        }).start();
+    }
+
+    public void addExtraLife() {
+        this.playerLives += 1;
+        System.out.println("Thêm 1 mạng sống. Tổng mạng: " + this.playerLives);
+    }
+
     public void draw(Graphics2D g2) {
         g2.setColor(Color.black);
 

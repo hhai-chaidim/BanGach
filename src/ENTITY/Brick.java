@@ -77,6 +77,7 @@ public class Brick {
         return brickList;
     }
 
+
     public void update() {
 
     }
