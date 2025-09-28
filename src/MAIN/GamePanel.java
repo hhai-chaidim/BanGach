@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GamePanel extends JPanel implements Runnable {
     final int originalTileSize = 16;
@@ -31,9 +32,11 @@ public class GamePanel extends JPanel implements Runnable {
     Player player = new Player(this, keyHandler);
     ArrayList<Brick> bricks = Brick.createBricks();
     ArrayList<OBJ_Item> items = new ArrayList<>();
-    Ball ball = new Ball(this, player, bricks);
+    public CopyOnWriteArrayList<Ball> balls = new CopyOnWriteArrayList<>();
+
     OBJ_Heart objHeart = new OBJ_Heart(this, player);
     public AssetSetter assetSetter = new AssetSetter(this);
+
 
 
     public GamePanel() {
@@ -46,6 +49,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void setupGame() {
         assetSetter.setObject();
+        Ball initialBall = new Ball(this, player, bricks);
+        balls.add(initialBall);
     }
 
     public void startGameThread() {
@@ -74,31 +79,43 @@ public class GamePanel extends JPanel implements Runnable {
     }
     public void update() {
         player.update();
-        ball.update();
 
-        if (keyHandler.spacePressed && !ball.ballActived) {
-            ball.activeBall();
+        for(Ball ball : balls) {
+            ball.update();
+            if (keyHandler.spacePressed && !ball.ballActived) {
+                ball.activeBall();
+            }
         }
+        balls.removeIf(ball -> !ball.ballActived && ball.ballY > screenHeight);
+
+        if (balls.isEmpty()) {
+            Ball newBall = new Ball(this, player, bricks);
+            balls.add(newBall);
+        }
+
         updateBricks();
-        for (int i = 0; i < items.size(); i++) {
-            OBJ_Item item = items.get(i);
+        updateItems();
+    }
+
+    private void updateItems() {
+        Iterator<OBJ_Item> itemIterator = items.iterator();
+        while (itemIterator.hasNext()) {
+            OBJ_Item item = itemIterator.next();
             item.update();
 
             Rectangle playerRect = new Rectangle(player.playerX, player.playerY, player.width, player.height);
             Rectangle itemRect = new Rectangle(item.objectX, item.objectY, item.diameter, item.diameter);
 
             if (playerRect.intersects(itemRect)) {
-                if (item.objectColission == true) {
-                    return;
-                } else {
+                if (!item.objectColission) {
                     activateItemEffect(item);
                 }
-                items.remove(i);
-                i--;
+                itemIterator.remove();
+            }
+            else if (item.objectY > screenHeight) {
+                itemIterator.remove();
             }
         }
-
-
     }
 
     public void gameQuit() {
@@ -113,12 +130,14 @@ public class GamePanel extends JPanel implements Runnable {
         tileManager.draw(g2);
 
         player.draw(g2);
-        ball.draw(g2);
+        for(Ball ball : balls) {
+            ball.draw(g2);
+        }
         for(Brick brick : bricks) {
             brick.draw(g2);
         }
         for (OBJ_Item item : items) {
-            item.draw(g2, this);
+            item.draw(g2);
         }
 
         OBJ_Heart.drawHearts(g2);
@@ -146,7 +165,10 @@ public class GamePanel extends JPanel implements Runnable {
     public void activateItemEffect(OBJ_Item item) {
         switch (item.type) {
             case OBJ_Item.TYPE_EXTRA_BALL:
-                ball.addExtraBall();
+                if (!balls.isEmpty()) {
+                    Ball sourceBall = balls.get(0);
+                    sourceBall.addExtraBall(sourceBall);
+                }
                 break;
 
             case OBJ_Item.TYPE_PLAYER_SIZE:
@@ -159,7 +181,9 @@ public class GamePanel extends JPanel implements Runnable {
 
             case OBJ_Item.TYPE_SLOW_BALL:
                 OBJ_Item.setObjectColission(item, true);
-                ball.slowDownBall();
+                for(Ball ball : balls) {
+                    ball.slowDownBall();
+                }
                 break;
 
             default:

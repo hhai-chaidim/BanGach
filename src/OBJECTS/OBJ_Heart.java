@@ -5,10 +5,13 @@ import MAIN.GamePanel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 
-public class OBJ_Heart extends SuperObject{
+public class OBJ_Heart{
+    public static BufferedImage image;
+    public String name;
     static GamePanel gp;
     static Player player;
 

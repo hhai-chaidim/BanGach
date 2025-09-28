@@ -1,9 +1,17 @@
 package ENTITY;
 
 import MAIN.GamePanel;
+import OBJECTS.OBJ_Item;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static java.lang.Math.max;
 
@@ -13,12 +21,28 @@ public class Ball {
     ArrayList<Brick> bricks;
 
     int ballX;
-    int ballY;
+    public int ballY;
     public int diameter = 20;
     int speedX;
     int speedY;
 
+    private int originalSpeedX = 4;
+    private int originalSpeedY = -4;
+    private boolean isSlowed = false;
+
+
     public boolean ballActived = false;
+    private static BufferedImage image;
+
+    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
+
+    static {
+        try {
+            image = ImageIO.read(Objects.requireNonNull(OBJ_Item.class.getResourceAsStream("/Object/Player.png")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public Ball(GamePanel gp, Player player, ArrayList<Brick> bricks) {
         this.gp = gp;
@@ -65,24 +89,38 @@ public class Ball {
             } else {
                 speedX = Math.abs(speedX);
             }
+            originalSpeedX = speedX;
+            originalSpeedY = speedY;
         }
         if (ballX <= 0 || ballX >= gp.screenWidth - diameter) {
             speedX = -speedX;
+            originalSpeedX = -originalSpeedX;
         }
         if (ballY <= 0) {
             speedY = -speedY;
+            originalSpeedY = -originalSpeedY;
         }
         if (ballY >= gp.screenHeight - diameter) {
-            player.playerLives--;
+            long activeBalls = gp.balls.stream().filter(b -> b.ballActived).count();
 
-            if (player.playerLives <= 0) {
-                gp.gameQuit();
+            if (activeBalls <= 1) {
+                player.playerLives--;
+
+                if (player.playerLives <= 0) {
+                    gp.gameQuit();
+                } else {
+                    resetBall();
+                }
             } else {
-                resetBall();
+                ballActived = false;
             }
+            return;
         }
 
-        for (Brick brick : bricks) {
+        ArrayList<Brick> bricksCopy = new ArrayList<>(bricks);
+        for (Brick brick : bricksCopy) {
+            if (!brick.isVisible()) continue;
+
             Rectangle ballRect = new Rectangle(ballX, ballY, diameter, diameter);
             Rectangle brickRect = brick.getBounds();
 
@@ -97,13 +135,18 @@ public class Ball {
 
                 if (hitFromTop || hitFromBottom) {
                     speedY = -speedY;
+                    originalSpeedY = -originalSpeedY;
                 } else if (hitFromLeft || hitFromRight) {
                     speedX = -speedX;
+                    originalSpeedX = -originalSpeedX;
                 } else {
                     speedX = -speedX;
                     speedY = -speedY;
+                    originalSpeedX = -originalSpeedX;
+                    originalSpeedY = -originalSpeedY;
                 }
                 brick.setVisible(false);
+                break;
             }
         }
     }
@@ -114,39 +157,64 @@ public class Ball {
         }
     }
 
-    public void addExtraBall() {
-        Ball newBall = new Ball(gp, player, bricks);
-        newBall.ballX = this.ballX;
-        newBall.ballY = this.ballY;
-        newBall.ballActived = true;
-        newBall.speedX = -this.speedX;
-        newBall.speedY = this.speedY;
+    public void addExtraBall(Ball currentBall) {
 
-        System.out.println("Spawn thêm 1 bóng mới!");
+        Ball newBall = new Ball(gp, player, bricks);
+        newBall.ballX = currentBall.ballX;
+        newBall.ballY = currentBall.ballY;
+        newBall.ballActived = true;
+
+        newBall.speedX = -currentBall.speedX;
+        newBall.speedY = currentBall.speedY;
+        newBall.originalSpeedX = newBall.speedX;
+        newBall.originalSpeedY = newBall.speedY;
+
+        gp.balls.add(newBall);
+
+        System.out.println("Spawn thêm 1 bóng! Tổng bóng hiện tại: " + gp.balls.size());
     }
 
     public void slowDownBall() {
-        int originalSpeedX = this.speedX;
-        int originalSpeedY = this.speedY;
+        if (isSlowed) return;
 
-        this.speedX = this.speedX / 2;
-        this.speedY = this.speedY / 2;
+        isSlowed = true;
+        speedX = speedX / 2;
+        speedY = speedY / 2;
 
-        new Thread(() -> {
+        Thread restoreThread = new Thread(() -> {
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            this.speedX = originalSpeedX;
-            this.speedY = originalSpeedY;
-            System.out.println("Ball trở lại bình thường!");
-        }).start();
+
+            if (isSlowed) {
+                int normalSpeed = 4;
+
+                speedX = (speedX > 0) ? normalSpeed : -normalSpeed;
+                speedY = (speedY > 0) ? normalSpeed : -normalSpeed;
+
+                originalSpeedX = speedX;
+                originalSpeedY = speedY;
+
+                isSlowed = false;
+                System.out.println("Ball trở lại bình thường!");
+            }
+        });
+
+        restoreThread.setDaemon(true);
+        restoreThread.start();
     }
 
     public void draw(Graphics2D g2) {
-        g2.setColor(Color.RED);
-        g2.fillOval(ballX, ballY, diameter, diameter);
+        BufferedImage img = image;
+        if (img != null) {
+            g2.drawImage(img, ballX - 7, ballY, diameter + 7, diameter + 7, null);
+        }
+    }
+
+    public static void shutdown() {
+        scheduler.shutdown();
     }
 
 }
