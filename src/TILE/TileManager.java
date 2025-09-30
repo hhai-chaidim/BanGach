@@ -13,7 +13,7 @@ public class TileManager {
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
-        tile = new Tile[10];
+        tile = new Tile[1];
 
         getTileImage();
     }
@@ -21,7 +21,7 @@ public class TileManager {
     public void getTileImage() {
         try{
             tile[0] = new Tile();
-            tile[0].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Background/DungeonTileSet.png")));
+            tile[0].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Background/test.jpg")));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -34,17 +34,6 @@ public class TileManager {
         int x = 0;
         int y = 0;
 
-        while(col < gp.maxScreenCol && row < gp.maxScreenRow) {
-            g2.drawImage(tile[0].image, x, y, gp.tileSize, gp.tileSize, null);
-            col++;
-            x += gp.tileSize;
-
-            if(col == gp.maxScreenCol) {
-                col = 0;
-                x = 0;
-                row++;
-                y += gp.tileSize;
-            }
-        }
+        g2.drawImage(tile[0].image, x, y, gp.maxScreenCol * gp.tileSize, gp.maxScreenRow * gp.tileSize, null);
     }
 }
