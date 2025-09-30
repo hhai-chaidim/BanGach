@@ -35,5 +35,4 @@ public class TileManager {
         int y = 0;
 
         g2.drawImage(tile[0].image, x, y, gp.maxScreenCol * gp.tileSize, gp.maxScreenRow * gp.tileSize, null);
-    }
 }
