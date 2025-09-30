@@ -67,22 +67,24 @@ public class GamePanel extends JPanel implements Runnable {
         long currentTime;
 
         while (gameThread != null) {
+            currentTime = System.nanoTime();
+            delta += (currentTime - lastTime) / drawInterval;
+            lastTime = currentTime;
             if (keyHandler.spacePressed) {
                 gameState = GameState.PLAYING;
             }
             if (keyHandler.pButtonPressed) {
                 gameState = GameState.PAUSE;
-                pause();
             }
             if (gameState.equals(GameState.PLAYING)) {
-                currentTime = System.nanoTime();
-                delta += (currentTime - lastTime) / drawInterval;
-                lastTime = currentTime;
                 if (delta >= 1) {
                     update();
                     repaint();
                     delta--;
                 }
+            }
+            if (delta >= 1) {
+                delta--;
             }
         }
     }
