@@ -7,6 +7,7 @@ import OBJECTS.OBJ_Heart;
 import OBJECTS.OBJ_Item;
 import OBJECTS.SuperObject;
 import TILE.TileManager;
+import GAMESTATE.GameState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,9 +27,10 @@ public class GamePanel extends JPanel implements Runnable {
 
     int FPS = 60;
 
+    GameState gameState = GameState.PLAYING;
     TileManager tileManager = new TileManager(this);
     KeyHandler keyHandler = new KeyHandler(this);
-    Thread gameThread;
+    Thread gameThread = new Thread(this);
     Player player = new Player(this, keyHandler);
     ArrayList<Brick> bricks = Brick.createBricks();
     ArrayList<OBJ_Item> items = new ArrayList<>();
@@ -54,7 +56,6 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void startGameThread() {
-        gameThread = new Thread(this);
         gameThread.start();
     }
 
@@ -66,17 +67,32 @@ public class GamePanel extends JPanel implements Runnable {
         long currentTime;
 
         while (gameThread != null) {
-            currentTime = System.nanoTime();
-            delta += (currentTime - lastTime) / drawInterval;
-            lastTime = currentTime;
-            if (delta >= 1) {
-                update();
-                repaint();
-                delta--;
+            if (keyHandler.spacePressed) {
+                gameState = GameState.PLAYING;
             }
-
+            if (keyHandler.pButtonPressed) {
+                gameState = GameState.PAUSE;
+                pause();
+            }
+            if (gameState.equals(GameState.PLAYING)) {
+                currentTime = System.nanoTime();
+                delta += (currentTime - lastTime) / drawInterval;
+                lastTime = currentTime;
+                if (delta >= 1) {
+                    update();
+                    repaint();
+                    delta--;
+                }
+            }
         }
     }
+
+    public void pause() {
+        for (Ball ball : balls) {
+            ball.deactiveBall();
+        }
+    }
+
     public void update() {
         player.update();
 
