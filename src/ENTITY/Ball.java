@@ -66,8 +66,7 @@ public class Ball {
 
     public void update() {
         if (ballActived == false) {
-            ballX = player.playerX + player.width / 2 - diameter / 2;
-            ballY = player.playerY - diameter;
+            // Working
         } else {
             ballX += speedX;
             ballY += speedY;
@@ -154,6 +153,12 @@ public class Ball {
     public void activeBall() {
         if (!ballActived) {
             ballActived = true;
+        }
+    }
+
+    public void deactiveBall() {
+        if (ballActived) {
+            ballActived = false;
         }
     }
 
