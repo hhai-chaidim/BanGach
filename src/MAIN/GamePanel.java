@@ -31,6 +31,8 @@ public class GamePanel extends JPanel implements Runnable {
     GameState gameState = GameState.PLAYING;
     TileManager tileManager = new TileManager(this);
     KeyHandler keyHandler = new KeyHandler(this);
+    Sound sound = new Sound();
+
     Thread gameThread = new Thread(this);
     Player player = new Player(this, keyHandler);
     ArrayList<Brick> bricks = Brick.createBricks();
@@ -39,8 +41,6 @@ public class GamePanel extends JPanel implements Runnable {
 
     OBJ_Heart objHeart = new OBJ_Heart(this, player);
     public AssetSetter assetSetter = new AssetSetter(this);
-
-
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -191,6 +191,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void activateItemEffect(OBJ_Item item) {
+        playSE(2);
         switch (item.type) {
             case OBJ_Item.TYPE_EXTRA_BALL:
                 if (!balls.isEmpty()) {
@@ -235,5 +236,23 @@ public class GamePanel extends JPanel implements Runnable {
         balls.add(initialBall);
         keyHandler.spacePressed = false;
         repaint();
+    }
+
+    public void playMusic(int i) {
+        sound.setFile(i);
+        sound.play();
+        sound.loop();
+    }
+
+    public void stopMusic() {
+        for(int i = 0; i <= 4; i++){
+            sound.setFile(i);
+            sound.stop();
+        }
+    }
+
+    public void playSE(int i) {
+        sound.setFile(i);
+        sound.play();
     }
 }

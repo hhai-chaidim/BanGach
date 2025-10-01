@@ -174,6 +174,7 @@ public class UI {
                 try {
                     isMuted = !isMuted;
                     if (isMuted) {
+                        gp.stopMusic();
                         buttonIcons[1] = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Tileset/Pause menu/Square Mute.png")));
                     } else {
                         buttonIcons[1] = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Tileset/Pause menu/Square Volume.png")));

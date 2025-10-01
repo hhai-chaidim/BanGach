@@ -74,7 +74,9 @@ public class Ball {
                         ballY + diameter > player.playerY &&
                         ballY < player.playerY + player.height
         ) {
-
+            if (ballActived) {
+                gp.playSE(0);
+            }
             speedY = -Math.abs(speedY);
 
             int playerCenter = player.playerX + player.width / 2;
@@ -89,10 +91,12 @@ public class Ball {
             originalSpeedY = speedY;
         }
         if (ballX <= 0 || ballX >= gp.screenWidth - diameter) {
+            gp.playSE(0);
             speedX = -speedX;
             originalSpeedX = -originalSpeedX;
         }
         if (ballY <= 0) {
+            gp.playSE(0);
             speedY = -speedY;
             originalSpeedY = -originalSpeedY;
         }
@@ -123,6 +127,8 @@ public class Ball {
             Rectangle brickRect = brick.getBounds();
 
             if (ballRect.intersects(brickRect)) {
+                gp.playSE(0);
+
                 int ballCenterX = ballX + diameter / 2;
                 int ballCenterY = ballY + diameter / 2;
 
