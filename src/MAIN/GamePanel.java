@@ -34,7 +34,7 @@ public class GamePanel extends JPanel implements Runnable {
     Player player = new Player(this, keyHandler);
     ArrayList<Brick> bricks = Brick.createBricks();
     ArrayList<OBJ_Item> items = new ArrayList<>();
-    public CopyOnWriteArrayList<Ball> balls = new CopyOnWriteArrayList<>();
+    public ArrayList<Ball> balls = new ArrayList<>();
 
     OBJ_Heart objHeart = new OBJ_Heart(this, player);
     public AssetSetter assetSetter = new AssetSetter(this);
@@ -89,12 +89,6 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
-    public void pause() {
-        for (Ball ball : balls) {
-            ball.deactiveBall();
-        }
-    }
-
     public void update() {
         player.update();
 
@@ -104,7 +98,7 @@ public class GamePanel extends JPanel implements Runnable {
                 ball.activeBall();
             }
         }
-        balls.removeIf(ball -> !ball.ballActived && ball.ballY > screenHeight);
+        balls.removeIf(ball -> !ball.ballActived && ball.ballY >= screenHeight - ball.diameter);
 
         if (balls.isEmpty()) {
             Ball newBall = new Ball(this, player, bricks);

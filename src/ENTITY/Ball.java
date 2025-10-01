@@ -157,12 +157,6 @@ public class Ball {
         }
     }
 
-    public void deactiveBall() {
-        if (ballActived) {
-            ballActived = false;
-        }
-    }
-
     public void addExtraBall(Ball currentBall) {
 
         Ball newBall = new Ball(gp, player, bricks);
