@@ -13,7 +13,7 @@ public class TileManager {
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
-        tile = new Tile[10];
+        tile = new Tile[1];
 
         getTileImage();
     }
@@ -21,15 +21,19 @@ public class TileManager {
     public void getTileImage() {
         try{
             tile[0] = new Tile();
-            tile[0].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Background/9316762.jpg")));
+            tile[0].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Background/test.jpg")));
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-public void draw(Graphics2D g2) {
-        // Draw the image once, stretched to fit the entire screen
-        g2.drawImage(tile[0].image, 0, 0, gp.screenWidth, gp.screenHeight, null);
+    public void draw(Graphics2D g2) {
+        int col = 0;
+        int row = 0;
+        int x = 0;
+        int y = 0;
+
+        g2.drawImage(tile[0].image, x, y, gp.maxScreenCol * gp.tileSize, gp.maxScreenRow * gp.tileSize, null);
     }
 }

@@ -7,6 +7,7 @@ import OBJECTS.OBJ_Heart;
 import OBJECTS.OBJ_Item;
 import OBJECTS.SuperObject;
 import TILE.TileManager;
+import GAMESTATE.GameState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,13 +27,14 @@ public class GamePanel extends JPanel implements Runnable {
 
     int FPS = 60;
 
+    GameState gameState = GameState.PLAYING;
     TileManager tileManager = new TileManager(this);
     KeyHandler keyHandler = new KeyHandler(this);
-    Thread gameThread;
+    Thread gameThread = new Thread(this);
     Player player = new Player(this, keyHandler);
     ArrayList<Brick> bricks = Brick.createBricks();
     ArrayList<OBJ_Item> items = new ArrayList<>();
-    public CopyOnWriteArrayList<Ball> balls = new CopyOnWriteArrayList<>();
+    public ArrayList<Ball> balls = new ArrayList<>();
 
     OBJ_Heart objHeart = new OBJ_Heart(this, player);
     public AssetSetter assetSetter = new AssetSetter(this);
@@ -54,7 +56,6 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void startGameThread() {
-        gameThread = new Thread(this);
         gameThread.start();
     }
 
@@ -69,14 +70,25 @@ public class GamePanel extends JPanel implements Runnable {
             currentTime = System.nanoTime();
             delta += (currentTime - lastTime) / drawInterval;
             lastTime = currentTime;
+            if (keyHandler.spacePressed) {
+                gameState = GameState.PLAYING;
+            }
+            if (keyHandler.pButtonPressed) {
+                gameState = GameState.PAUSE;
+            }
+            if (gameState.equals(GameState.PLAYING)) {
+                if (delta >= 1) {
+                    update();
+                    repaint();
+                    delta--;
+                }
+            }
             if (delta >= 1) {
-                update();
-                repaint();
                 delta--;
             }
-
         }
     }
+
     public void update() {
         player.update();
 
@@ -86,7 +98,7 @@ public class GamePanel extends JPanel implements Runnable {
                 ball.activeBall();
             }
         }
-        balls.removeIf(ball -> !ball.ballActived && ball.ballY > screenHeight);
+        balls.removeIf(ball -> !ball.ballActived && ball.ballY >= screenHeight - ball.diameter);
 
         if (balls.isEmpty()) {
             Ball newBall = new Ball(this, player, bricks);

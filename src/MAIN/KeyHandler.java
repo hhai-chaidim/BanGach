@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
     GamePanel gp;
-    public boolean leftPressed, rightPressed, spacePressed;
+    public boolean leftPressed, rightPressed, spacePressed, pButtonPressed;
 
     public KeyHandler(GamePanel gp) {
         this.gp = gp;
@@ -30,7 +30,7 @@ public class KeyHandler implements KeyListener {
             spacePressed = true;
         }
         if (code == KeyEvent.VK_P) {
-
+            pButtonPressed = true;
         }
     }
 
@@ -46,6 +46,9 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_SPACE) {
             spacePressed = false;
+        }
+        if (code == KeyEvent.VK_P) {
+            pButtonPressed = false;
         }
     }
 }
