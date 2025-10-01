@@ -161,7 +161,7 @@ public class GamePanel extends JPanel implements Runnable {
         while (iterator.hasNext()) {
             Brick brick = iterator.next();
             if (!brick.isVisible()) {
-                if (Math.random() < 0.4) {
+                if (Math.random() < 0.1) {
                     int itemX = brick.x + brick.width / 2;
                     int itemY = brick.y + brick.height / 2;
 
