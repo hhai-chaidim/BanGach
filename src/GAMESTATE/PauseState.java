@@ -1,6 +1,6 @@
-package MAIN;
+package GAMESTATE;
 
-import GAMESTATE.GameState;
+import MAIN.GamePanel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -8,23 +8,24 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 
-public class UI {
-    GamePanel gp;
-    BufferedImage pauseMenuImage;
-    BufferedImage[] buttonIcons;
-    BufferedImage image;
-    BufferedImage[] volumeButton;
+public class PauseState {
+    static GamePanel gp;
+    static BufferedImage pauseMenuImage;
+    static BufferedImage[] buttonIcons;
+    static BufferedImage image;
+    static BufferedImage image2;
+    static BufferedImage[] volumeButton;
 
-    private int selectedButton = 0;
-    private int totalButtons = 6;
-    private Rectangle[] buttonBounds;
-    private int volumeLevel = 2;
-    private boolean highPressedLastFrame = false;
-    private boolean lowPressedLastFrame = false;
+    private static int selectedButton = 0;
+    private static int totalButtons = 6;
+    private static Rectangle[] buttonBounds;
+    private static int volumeLevel = 2;
+    private static boolean highPressedLastFrame = false;
+    private static boolean lowPressedLastFrame = false;
 
     private boolean isMuted = false;
 
-    public UI(GamePanel gp) {
+    public PauseState(GamePanel gp) {
         this.gp = gp;
         loadImages();
         initializeButtons();
@@ -33,6 +34,7 @@ public class UI {
     private void loadImages() {
         try {
             image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Background/test.jpg")));
+            image2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Tileset/Pause menu/Pauseee.png")));
             pauseMenuImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Tileset/Pause menu/Large Rectangle.png")));
             buttonIcons = new BufferedImage[6];
             buttonIcons[0] = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Tileset/Pause menu/Square Replay.png")));
@@ -53,8 +55,9 @@ public class UI {
         }
     }
 
-    public void draw(Graphics2D g2) {
+    public static void draw(Graphics2D g2) {
         g2.drawImage(image, 0, 0, gp.maxScreenCol * gp.tileSize, gp.maxScreenRow * gp.tileSize, null);
+        g2.drawImage(image2, 80 * 2 + 25, 32 * 3, 416 / 2, 128 / 2, null);
         switch (gp.gameState){
             case PAUSE:
                 g2.drawImage(pauseMenuImage, 0, 12 * 16, gp.maxScreenCol * gp.tileSize, 26 * 16, null);
@@ -90,7 +93,7 @@ public class UI {
         }
     }
 
-    private void drawButtons(Graphics2D g2) {
+    private static void drawButtons(Graphics2D g2) {
 
         int buttonSize = 80;
         int startX = 80;
@@ -133,7 +136,7 @@ public class UI {
         }
     }
 
-    private void drawButtonHighlight(Graphics2D g2) {
+    private static void drawButtonHighlight(Graphics2D g2) {
         Rectangle bounds = buttonBounds[selectedButton];
         g2.setColor(new Color(255, 255, 0, 150));
         g2.setStroke(new BasicStroke(4));
@@ -142,14 +145,14 @@ public class UI {
         g2.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
     }
 
-    private void drawVolumeButtons(Graphics2D g2) {
+    private static void drawVolumeButtons(Graphics2D g2) {
         int x = 64;
         int y = 480;
         int widthVolume = 432;
         int heightVolume = 64;
         g2.drawImage(volumeButton[volumeLevel], x, y, widthVolume, heightVolume, null);
     }
-    private void updateVolumeLevel() {
+    private static void updateVolumeLevel() {
         if (gp.keyHandler.highPressed && !highPressedLastFrame) {
             if (volumeLevel < 5) {
                 volumeLevel++;
@@ -184,7 +187,7 @@ public class UI {
                 }
                 break;
             case 2: // Home
-                gp.gameQuit();
+                gp.gameState = GameState.MENU;
                 break;
             case 3: // Settings
                 // Open settings
