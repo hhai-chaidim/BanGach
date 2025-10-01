@@ -1,5 +1,6 @@
 package ENTITY;
 
+import GAMESTATE.GameState;
 import MAIN.GamePanel;
 import OBJECTS.OBJ_Item;
 
@@ -102,7 +103,7 @@ public class Ball {
                 player.playerLives--;
                 if (player.playerLives <= 0) {
                     System.out.println("Game over!");
-                    gp.gameQuit();
+                    gp.setGameState(GameState.GAME_OVER);
                 } else {
                     System.out.println("Resetting ball...");
                     resetBall();

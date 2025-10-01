@@ -24,6 +24,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int maxScreenRow = 16;
     public final int screenWidth  = tileSize * maxScreenCol;
     public final int screenHeight = tileSize * maxScreenRow;
+    public UI ui = new UI(this);
 
     int FPS = 60;
 
@@ -70,43 +71,44 @@ public class GamePanel extends JPanel implements Runnable {
             currentTime = System.nanoTime();
             delta += (currentTime - lastTime) / drawInterval;
             lastTime = currentTime;
-            if (keyHandler.spacePressed) {
-                gameState = GameState.PLAYING;
-            }
-            if (keyHandler.pButtonPressed) {
-                gameState = GameState.PAUSE;
-            }
-            if (gameState.equals(GameState.PLAYING)) {
-                if (delta >= 1) {
+            if (delta >= 1) {
                     update();
                     repaint();
                     delta--;
                 }
-            }
-            if (delta >= 1) {
-                delta--;
-            }
         }
     }
 
     public void update() {
-        player.update();
+        switch (gameState){
+            case PLAYING:
+            player.update();
 
-        for(Ball ball : balls) {
-            ball.update();
-            if (keyHandler.spacePressed && !ball.ballActived) {
-                ball.activeBall();
+            for (Ball ball : balls) {
+                ball.update();
+                if (keyHandler.spacePressed && !ball.ballActived) {
+                    ball.activeBall();
+                }
             }
-        }
-        balls.removeIf(ball -> !ball.ballActived && ball.ballY >= screenHeight - ball.diameter);
+            balls.removeIf(ball -> !ball.ballActived && ball.ballY >= screenHeight - ball.diameter);
 
-        if (balls.isEmpty()) {
-            Ball newBall = new Ball(this, player, bricks);
-            balls.add(newBall);
-        }
+            if (balls.isEmpty()) {
+                Ball newBall = new Ball(this, player, bricks);
+                balls.add(newBall);
+            }
 
-        updateBricks();
-        updateItems();
+            updateBricks();
+            updateItems();
+            break;
+            case PAUSE:
+                break;
+            case MENU:
+                break;
+            case GAME_OVER:
+                break;
+            default:
+                break;
+        }
     }
 
     private void updateItems() {
@@ -139,21 +141,35 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D) g;
 
-        tileManager.draw(g2);
+        switch (gameState){
+            case PLAYING:
+                tileManager.draw(g2);
 
-        player.draw(g2);
-        for(Ball ball : balls) {
-            ball.draw(g2);
-        }
-        for(Brick brick : bricks) {
-            brick.draw(g2);
-        }
-        for (OBJ_Item item : items) {
-            item.draw(g2);
-        }
+                player.draw(g2);
+                for(Ball ball : balls) {
+                    ball.draw(g2);
+                }
+                for(Brick brick : bricks) {
+                    brick.draw(g2);
+                }
+                for (OBJ_Item item : items) {
+                    item.draw(g2);
+                }
 
-        OBJ_Heart.drawHearts(g2);
-        g2.dispose();
+                OBJ_Heart.drawHearts(g2);
+                break;
+                case PAUSE:
+                    ui.draw(g2);
+                break;
+                case MENU:
+                break;
+                case GAME_OVER:
+                    ui.draw(g2);
+                break;
+                default:
+                break;
+
+        }
     }
 
     public void updateBricks() {
@@ -161,7 +177,7 @@ public class GamePanel extends JPanel implements Runnable {
         while (iterator.hasNext()) {
             Brick brick = iterator.next();
             if (!brick.isVisible()) {
-                if (Math.random() < 0.4) {
+                if (Math.random() < 0.2) {
                     int itemX = brick.x + brick.width / 2;
                     int itemY = brick.y + brick.height / 2;
 
@@ -202,5 +218,22 @@ public class GamePanel extends JPanel implements Runnable {
                 System.out.println("Item không xác định!");
                 break;
         }
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
+
+        public void restart() {
+        gameState = GameState.PLAYING;
+        balls.clear();
+        bricks.clear();
+        items.clear();
+        player.playerLives = 3;
+        bricks = Brick.createBricks();
+        Ball initialBall = new Ball(this, player, bricks);
+        balls.add(initialBall);
+        keyHandler.spacePressed = false;
+        repaint();
     }
 }
