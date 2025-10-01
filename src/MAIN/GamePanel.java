@@ -85,14 +85,19 @@ public class GamePanel extends JPanel implements Runnable {
         switch (gameState){
             case PLAYING:
             player.update();
+                ArrayList<Ball> ballsCopy = new ArrayList<>(balls);
+                ArrayList<Ball> toRemove = new ArrayList<>();
 
-            for (Ball ball : balls) {
-                ball.update();
-                if (keyHandler.spacePressed && !ball.ballActived) {
-                    ball.activeBall();
+                for (Ball ball : ballsCopy) {
+                    ball.update();
+                    if (keyHandler.spacePressed && !ball.ballActived) {
+                        ball.activeBall();
+                    }
+                    if (!ball.ballActived && ball.ballY >= screenHeight - ball.diameter) {
+                        toRemove.add(ball);
+                    }
                 }
-            }
-            balls.removeIf(ball -> !ball.ballActived && ball.ballY >= screenHeight - ball.diameter);
+                balls.removeAll(toRemove);
 
             if (balls.isEmpty()) {
                 Ball newBall = new Ball(this, player, bricks);
