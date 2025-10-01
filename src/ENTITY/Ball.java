@@ -1,5 +1,6 @@
 package ENTITY;
 
+import GAMESTATE.GameState;
 import MAIN.GamePanel;
 import OBJECTS.OBJ_Item;
 
@@ -51,11 +52,6 @@ public class Ball {
         resetBall();
     }
 
-    public void setSpeed(int x) {
-        speedX = x;
-        speedY = x;
-    }
-
     public void resetBall() {
         ballActived = false;
         ballX = player.playerX + player.width / 2 - diameter / 2;
@@ -105,16 +101,18 @@ public class Ball {
 
             if (activeBalls <= 1) {
                 player.playerLives--;
-
                 if (player.playerLives <= 0) {
-                    gp.gameQuit();
+                    System.out.println("Game over!");
+                    gp.setGameState(GameState.GAME_OVER);
                 } else {
+                    System.out.println("Resetting ball...");
                     resetBall();
                 }
             } else {
+                System.out.println("Deactivating ball...");
                 ballActived = false;
+                gp.balls.removeIf(b -> !b.ballActived);
             }
-            return;
         }
 
         ArrayList<Brick> bricksCopy = new ArrayList<>(bricks);
@@ -207,10 +205,7 @@ public class Ball {
     }
 
     public void draw(Graphics2D g2) {
-        BufferedImage img = image;
-        if (img != null) {
-            g2.drawImage(img, ballX - 7, ballY, diameter + 7, diameter + 7, null);
-        }
+        g2.drawImage(image, ballX - 7, ballY, diameter + 7, diameter + 7, null);
     }
 
     public static void shutdown() {
