@@ -49,7 +49,7 @@ public class MenuState {
 
     public static void draw(Graphics2D g2) {
         g2.drawImage(image, 0, 0, gp.maxScreenCol * gp.tileSize, gp.maxScreenRow * gp.tileSize, null);
-        g2.drawImage(gameName, (11 * gp.tileSize) / 5, gp.tileSize / 2, 333, 97, null);
+        g2.drawImage(gameName, 57 * gp.tileSize / 20, gp.tileSize / 2, 333, 97, null);
         drawButtons(g2);
         drawButtonHighlight(g2);
     }
