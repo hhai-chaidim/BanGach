@@ -21,8 +21,8 @@ public class Ball {
     Player player;
     ArrayList<Brick> bricks;
 
-    int ballX;
-    int ballY;
+    public int ballX;
+    public int ballY;
     public int diameter = 20;
     int speedX;
     int speedY;
