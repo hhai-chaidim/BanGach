@@ -42,22 +42,22 @@ public class KeyHandler implements KeyListener {
         if (gp.gameState == GameState.PAUSE || gp.gameState == GameState.GAME_OVER) {
             if (code == KeyEvent.VK_UP || code == KeyEvent.VK_W) {
                 gp.playSE(3);
-                gp.ui.selectUpButton();
+                gp.pause.selectUpButton();
             }
             if (code == KeyEvent.VK_DOWN || code == KeyEvent.VK_S) {
                 gp.playSE(3);
-                gp.ui.selectDownButton();
+                gp.pause.selectDownButton();
             }
             if (code == KeyEvent.VK_LEFT || code == KeyEvent.VK_A) {
                 gp.playSE(3);
-                gp.ui.selectLeftButton();
+                gp.pause.selectLeftButton();
             }
             if (code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_D) {
                 gp.playSE(3);
-                gp.ui.selectRightButton();
+                gp.pause.selectRightButton();
             }
             if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
-                gp.ui.activateSelectedButton();
+                gp.pause.activateSelectedButton();
                 gp.playSE(1);
             }
             if (code == KeyEvent.VK_H) {
@@ -67,6 +67,19 @@ public class KeyHandler implements KeyListener {
             if (code == KeyEvent.VK_L) {
                 gp.playSE(4);
                 lowPressed = true;
+            }
+        } else if (gp.gameState == GameState.MENU) {
+            if (code == KeyEvent.VK_UP || code == KeyEvent.VK_W) {
+                gp.playSE(3);
+                gp.menu.selectUpButton();
+            }
+            if (code == KeyEvent.VK_DOWN || code == KeyEvent.VK_S) {
+                gp.playSE(3);
+                gp.menu.selectDownButton();
+            }
+            if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
+                gp.menu.activateSelectedButton();
+                gp.playSE(1);
             }
         }
     }
