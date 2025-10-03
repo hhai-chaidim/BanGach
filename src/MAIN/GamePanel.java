@@ -3,9 +3,10 @@ package MAIN;
 import ENTITY.Ball;
 import ENTITY.Brick;
 import ENTITY.Player;
+import GAMESTATE.MenuState;
+import GAMESTATE.PauseState;
 import OBJECTS.OBJ_Heart;
 import OBJECTS.OBJ_Item;
-import OBJECTS.SuperObject;
 import TILE.TileManager;
 import GAMESTATE.GameState;
 
@@ -13,7 +14,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GamePanel extends JPanel implements Runnable {
     final int originalTileSize = 16;
@@ -24,13 +24,14 @@ public class GamePanel extends JPanel implements Runnable {
     public final int maxScreenRow = 16;
     public final int screenWidth  = tileSize * maxScreenCol;
     public final int screenHeight = tileSize * maxScreenRow;
-    public UI ui = new UI(this);
+    public PauseState pause = new PauseState(this);
+    public MenuState menu = new MenuState(this);
 
     int FPS = 60;
 
-    GameState gameState = GameState.PLAYING;
+    public GameState gameState = GameState.PLAYING;
     TileManager tileManager = new TileManager(this);
-    KeyHandler keyHandler = new KeyHandler(this);
+    public KeyHandler keyHandler = new KeyHandler(this);
     Sound sound = new Sound();
 
     Thread gameThread = new Thread(this);
@@ -57,6 +58,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void startGameThread() {
+        gameState = GameState.MENU;
         gameThread.start();
     }
 
@@ -83,14 +85,19 @@ public class GamePanel extends JPanel implements Runnable {
         switch (gameState){
             case PLAYING:
             player.update();
+                ArrayList<Ball> ballsCopy = new ArrayList<>(balls);
+                ArrayList<Ball> toRemove = new ArrayList<>();
 
-            for (Ball ball : balls) {
-                ball.update();
-                if (keyHandler.spacePressed && !ball.ballActived) {
-                    ball.activeBall();
+                for (Ball ball : ballsCopy) {
+                    ball.update();
+                    if (keyHandler.spacePressed && !ball.ballActived) {
+                        ball.activeBall();
+                    }
+                    if (!ball.ballActived && ball.ballY >= screenHeight - ball.diameter) {
+                        toRemove.add(ball);
+                    }
                 }
-            }
-            balls.removeIf(ball -> !ball.ballActived && ball.ballY >= screenHeight - ball.diameter);
+                balls.removeAll(toRemove);
 
             if (balls.isEmpty()) {
                 Ball newBall = new Ball(this, player, bricks);
@@ -159,12 +166,13 @@ public class GamePanel extends JPanel implements Runnable {
                 OBJ_Heart.drawHearts(g2);
                 break;
                 case PAUSE:
-                    ui.draw(g2);
+                    pause.draw(g2);
                 break;
                 case MENU:
+                    menu.draw(g2);
                 break;
                 case GAME_OVER:
-                    ui.draw(g2);
+                    pause.draw(g2);
                 break;
                 default:
                 break;
