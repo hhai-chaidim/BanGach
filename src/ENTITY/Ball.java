@@ -22,7 +22,7 @@ public class Ball {
     ArrayList<Brick> bricks;
 
     int ballX;
-    public int ballY;
+    int ballY;
     public int diameter = 20;
     int speedX;
     int speedY;
