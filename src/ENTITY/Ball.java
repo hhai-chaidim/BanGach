@@ -77,16 +77,26 @@ public class Ball {
             if (ballActived) {
                 gp.playSE(0);
             }
-            speedY = -Math.abs(speedY);
+            ballY = player.playerY - diameter;
 
-            int playerCenter = player.playerX + player.width / 2;
             int ballCenter = ballX + diameter / 2;
-
-            if (ballCenter < playerCenter) {
-                speedX = -Math.abs(speedX);
-            } else {
-                speedX = Math.abs(speedX);
+            double hitPosition = (double)(ballCenter - player.playerX) / (double) player.width;
+            hitPosition = Math.max(0.0, Math.min(1.0, hitPosition));
+            double angle = (hitPosition - 0.5) * 120.0;
+            double angleRad = Math.toRadians(angle);
+            float totalSpeed = (float)Math.sqrt(speedX * speedX + speedY * speedY);
+            speedX = (int)(totalSpeed * Math.sin(angleRad));
+            speedY = -(int)(totalSpeed * Math.cos(angleRad));
+            speedX += (int)(player.speed * 0.3);
+            double currentSpeed = Math.sqrt(speedX * speedX + speedY * speedY);
+            double speedRatio = totalSpeed * 1.1 / currentSpeed;
+            speedX = (int)(speedX * speedRatio);
+            speedY = (int)(speedY * speedRatio);
+            int minUpwardSpeed = 3;
+            if (Math.abs(speedY) < minUpwardSpeed) {
+                speedY = -minUpwardSpeed;
             }
+
             originalSpeedX = speedX;
             originalSpeedY = speedY;
         }
@@ -217,5 +227,4 @@ public class Ball {
     public static void shutdown() {
         scheduler.shutdown();
     }
-
 }
