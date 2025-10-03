@@ -13,6 +13,7 @@ public class MenuState {
     static BufferedImage[] buttonIcons;
     static BufferedImage[] highlightImage;
     static BufferedImage image;
+    static BufferedImage gameName;
 
     private static int selectedButton = 0;
     private static Rectangle[] buttonBounds;
@@ -27,6 +28,8 @@ public class MenuState {
     private void loadImages() {
         try {
             image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Background/test.jpg")));
+            gameName = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Tileset/Setting menu/Arkanoid.png")));
+
             buttonIcons = new BufferedImage[4];
             buttonIcons[0] = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Tileset/Setting menu/Start 1.png")));
             buttonIcons[1] = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Tileset/Setting menu/Score 1.png")));
@@ -46,17 +49,18 @@ public class MenuState {
 
     public static void draw(Graphics2D g2) {
         g2.drawImage(image, 0, 0, gp.maxScreenCol * gp.tileSize, gp.maxScreenRow * gp.tileSize, null);
+        g2.drawImage(gameName, 57 * gp.tileSize / 20, gp.tileSize / 2, 333, 97, null);
         drawButtons(g2);
         drawButtonHighlight(g2);
     }
 
     public static void drawButtons(Graphics2D g2) {
-        int startX = 80;
-        int startY = 64;
-        int spaceY = 32;
+        int width = 300;
+        int height = 108;
 
-        int width = 400;
-        int height = 144;
+        int startX = 3 * gp.tileSize;
+        int startY = 3 * gp.tileSize;
+        int spaceY = 32;
 
         for (int i = 0; i < totalButtons; i++) {
             int x = startX;
@@ -91,12 +95,12 @@ public class MenuState {
     private void initializeButtons() {
         buttonBounds = new Rectangle[totalButtons];
 
-        int startX = 80;
-        int startY = 64;
+        int startX = 3 * gp.tileSize;
+        int startY = 3 * gp.tileSize;
         int spaceY = 32;
 
-        int width = 400;
-        int height = 144;
+        int width = 300;
+        int height = 108;
         for (int i = 0; i < totalButtons; i++){
             int x = startX;
             int y = startY + i * (height + spaceY);
