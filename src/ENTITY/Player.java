@@ -51,7 +51,7 @@ public class Player {
         this.playerY = 600;
         this.width = 64;
         this.height = 32;
-        this.speed = 4;
+        this.speed = 6;
         this.playerLives = 3;
     }
 
@@ -68,7 +68,6 @@ public class Player {
             turnLeftFrames = new BufferedImage[totalFrames];
             turnRightFrames = new BufferedImage[totalFrames];
 
-            // Extract frames from each sprite sheet
             for (int i = 0; i < totalFrames; i++) {
                 stableFrames[i] = stableSpriteSheet.getSubimage(0, i * frameHeight, frameWidth, frameHeight);
                 turnLeftFrames[i] = turnLeftSpriteSheet.getSubimage(0, i * frameHeight, frameWidth, frameHeight);
