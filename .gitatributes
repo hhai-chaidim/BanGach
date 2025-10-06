@@ -1,0 +1,10 @@
+# Tự động chuẩn hóa tất cả file text về LF
+* text=auto eol=lf
+
+# Java file luôn dùng LF
+*.java text eol=lf
+
+# Đảm bảo các file config cũng LF
+*.md text eol=lf
+*.yml text eol=lf
+*.xml text eol=lf
