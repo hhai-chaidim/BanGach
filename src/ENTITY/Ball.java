@@ -139,6 +139,7 @@ public class Ball {
             if (ballRect.intersects(brickRect)) {
                 gp.playSE(0);
 
+                brick.bricksLife--;
                 int ballCenterX = ballX + diameter / 2;
                 int ballCenterY = ballY + diameter / 2;
 
@@ -159,7 +160,9 @@ public class Ball {
                     originalSpeedX = -originalSpeedX;
                     originalSpeedY = -originalSpeedY;
                 }
-                brick.setVisible(false);
+                if(brick.bricksLife <= 0) {
+                    brick.setVisible(false);
+                }
                 break;
             }
         }

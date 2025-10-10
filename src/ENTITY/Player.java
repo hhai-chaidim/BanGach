@@ -133,6 +133,10 @@ public class Player {
         this.playerLives += 1;
         System.out.println("Thêm 1 mạng sống. Tổng mạng: " + this.playerLives);
     }
+    public void bomb() {
+        this.playerLives -= 1;
+        System.out.println("Mất 1 mạng sống. Tổng mạng: " + this.playerLives);
+    }
 
     public void draw(Graphics2D g2) {
         BufferedImage image = null;

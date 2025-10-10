@@ -30,12 +30,13 @@ public class OBJ_Item{
     public static final int TYPE_PLAYER_SIZE = 1;
     public static final int TYPE_EXTRA_LIFE = 2;
     public static final int TYPE_SLOW_BALL = 3;
+    public static final int TYPE_BOMB = 4;
 
     private static BufferedImage imageExtraBall;
     private static BufferedImage imagePlayerSize;
     private static BufferedImage imageExtraLife;
     private static BufferedImage imageSlowBall;
-
+    private static BufferedImage imageBomb;
 
     public int type;
 
@@ -45,6 +46,7 @@ public class OBJ_Item{
             imagePlayerSize = ImageIO.read(Objects.requireNonNull(OBJ_Item.class.getResourceAsStream("/Object/ExtraSize.png")));
             imageExtraLife = ImageIO.read(Objects.requireNonNull(OBJ_Item.class.getResourceAsStream("/Object/Healing.png")));
             imageSlowBall = ImageIO.read(Objects.requireNonNull(OBJ_Item.class.getResourceAsStream("/Object/Slow.png")));
+            imageBomb = ImageIO.read(Objects.requireNonNull(OBJ_Item.class.getResourceAsStream("/Object/bomb.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -84,6 +86,7 @@ public class OBJ_Item{
             case TYPE_PLAYER_SIZE: img = imagePlayerSize; break;
             case TYPE_EXTRA_LIFE: img = imageExtraLife; break;
             case TYPE_SLOW_BALL: img = imageSlowBall; break;
+            case TYPE_BOMB: img = imageBomb; break;
         }
 
         if (img != null) {

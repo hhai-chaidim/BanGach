@@ -15,6 +15,7 @@ public class Brick {
     public int height;
     public boolean visible;
     private int imageIndex; // index để chọn ảnh gạch
+    public int bricksLife;
 
     private static BufferedImage[] brickImages = new BufferedImage[8];
 
@@ -34,7 +35,7 @@ public class Brick {
         this.width = width;
         this.height = height;
         this.visible = true;
-
+        this.bricksLife = 2;
         this.imageIndex = imageIndex % brickImages.length;
     }
 

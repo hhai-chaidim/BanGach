@@ -185,11 +185,11 @@ public class GamePanel extends JPanel implements Runnable {
         while (iterator.hasNext()) {
             Brick brick = iterator.next();
             if (!brick.isVisible()) {
-                if (Math.random() < 0.2) {
+                if (Math.random() < 0.9) {
                     int itemX = brick.x + brick.width / 2;
                     int itemY = brick.y + brick.height / 2;
 
-                    int randomType = (int)(Math.random() * 4);
+                    int randomType = (int)(Math.random() * 5);
                     OBJ_Item newItem = new OBJ_Item(this, player, items, itemX, itemY, randomType);
                     items.add(newItem);
                 }
@@ -199,9 +199,9 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void activateItemEffect(OBJ_Item item) {
-        playSE(2);
         switch (item.type) {
             case OBJ_Item.TYPE_EXTRA_BALL:
+                playSE(2);
                 if (!balls.isEmpty()) {
                     Ball sourceBall = balls.get(0);
                     sourceBall.addExtraBall(sourceBall);
@@ -209,18 +209,25 @@ public class GamePanel extends JPanel implements Runnable {
                 break;
 
             case OBJ_Item.TYPE_PLAYER_SIZE:
+                playSE(2);
                 player.enlargePlayer();
                 break;
 
             case OBJ_Item.TYPE_EXTRA_LIFE:
+                playSE(2);
                 player.addExtraLife();
                 break;
 
             case OBJ_Item.TYPE_SLOW_BALL:
+                playSE(2);
                 OBJ_Item.setObjectColission(item, true);
                 for(Ball ball : balls) {
                     ball.slowDownBall();
                 }
+                break;
+            case OBJ_Item.TYPE_BOMB:
+                playSE(5);
+                player.bomb();
                 break;
 
             default:

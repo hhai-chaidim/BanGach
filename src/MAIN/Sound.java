@@ -15,6 +15,7 @@ public class Sound {
         soundURL[2] = getClass().getResource("/Sounds/power-up-type-1-230548.wav");
         soundURL[3] = getClass().getResource("/Sounds/retro-select-236670.wav");
         soundURL[4] = getClass().getResource("/Sounds/beep-329314.wav");
+        soundURL[5] = getClass().getResource("/Sounds/explosion-9-340460_1.wav");
     }
 
     public void setFile(int i) {
