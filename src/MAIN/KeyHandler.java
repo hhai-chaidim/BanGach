@@ -81,6 +81,30 @@ public class KeyHandler implements KeyListener {
                 gp.menu.activateSelectedButton();
                 gp.playSE(1);
             }
+        } else if (gp.gameState == GameState.LEVEL) {
+            if (code == KeyEvent.VK_UP || code == KeyEvent.VK_W) {
+                gp.playSE(3);
+                gp.level.selectUpButton();
+            }
+            if (code == KeyEvent.VK_DOWN || code == KeyEvent.VK_S) {
+                gp.playSE(3);
+                gp.level.selectDownButton();
+            }
+            if (code == KeyEvent.VK_LEFT || code == KeyEvent.VK_A) {
+                gp.playSE(3);
+                gp.level.selectLeftButton();
+            }
+            if (code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_D) {
+                gp.playSE(3);
+                gp.level.selectRightButton();
+            }
+            if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
+                gp.level.activateSelectedButton();
+                gp.playSE(1);
+            }
+            if (code == KeyEvent.VK_ESCAPE) {
+                gp.gameState = GameState.MENU;
+            }
         }
     }
 

@@ -3,6 +3,7 @@ package MAIN;
 import ENTITY.Ball;
 import ENTITY.Brick;
 import ENTITY.Player;
+import GAMESTATE.LevelState;
 import GAMESTATE.MenuState;
 import GAMESTATE.PauseState;
 import OBJECTS.OBJ_Heart;
@@ -26,6 +27,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int screenHeight = tileSize * maxScreenRow;
     public PauseState pause = new PauseState(this);
     public MenuState menu = new MenuState(this);
+    public LevelState level = new LevelState(this);
 
     int FPS = 60;
 
@@ -174,6 +176,8 @@ public class GamePanel extends JPanel implements Runnable {
                 case GAME_OVER:
                     pause.draw(g2);
                 break;
+                case LEVEL:
+                level.draw(g2);
                 default:
                 break;
 
@@ -269,5 +273,14 @@ public class GamePanel extends JPanel implements Runnable {
     public void playSE(int i) {
         sound.setFile(i);
         sound.play();
+    }
+
+    public void setLevel(int i) {
+        Brick.brickLevel = i;
+        bricks.clear();
+        bricks = Brick.createBricks();
+        for(Ball ball : balls) {
+            ball.bricks = bricks;
+        }
     }
 }

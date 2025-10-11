@@ -190,7 +190,7 @@ public class PauseState {
                 gp.gameState = GameState.MENU;
                 break;
             case 3: // Settings
-                // Open settings
+                gp.gameState = GameState.LEVEL;
                 break;
             case 4: // Menu
                 // Open menu
