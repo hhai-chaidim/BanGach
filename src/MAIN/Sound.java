@@ -3,11 +3,13 @@ package MAIN;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import java.net.URL;
 
 public class Sound {
     Clip clip;
     URL soundURL[] = new URL[30];
+    FloatControl volumeControl;
 
     public Sound() {
         soundURL[0] = getClass().getResource("/Sounds/7070672630561.wav");
@@ -23,10 +25,35 @@ public class Sound {
             AudioInputStream ais = AudioSystem.getAudioInputStream(soundURL[i]);
             clip = AudioSystem.getClip();
             clip.open(ais);
+
+            if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
+                volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            }
         } catch (Exception e){
 
         }
     }
+
+    public void setVolume(float volume) {
+        if (volumeControl != null) {
+
+            volume = Math.max(0.0f, Math.min(1.0f, volume));
+
+            float min = volumeControl.getMinimum();
+            float max = volumeControl.getMaximum();
+
+            float dB;
+            if (volume == 0.0f) {
+                dB = min;
+            } else {
+                float range = max - min;
+                dB = min + range * (float)Math.pow(volume, 0.5);
+            }
+
+            volumeControl.setValue(dB);
+        }
+    }
+
     public void play() {
         clip.start();
     }
@@ -34,6 +61,8 @@ public class Sound {
         clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
     public void stop() {
-        clip.stop();
+        if (clip != null && clip.isRunning()) {
+            clip.stop();
+        }
     }
 }

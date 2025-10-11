@@ -63,10 +63,14 @@ public class KeyHandler implements KeyListener {
             if (code == KeyEvent.VK_H) {
                 gp.playSE(4);
                 highPressed = true;
+                gp.increaseMusicVolume();
+                gp.increaseSoundEffectVolume();
             }
             if (code == KeyEvent.VK_L) {
                 gp.playSE(4);
                 lowPressed = true;
+                gp.decreaseMusicVolume();
+                gp.decreaseSoundEffectVolume();
             }
         } else if (gp.gameState == GameState.MENU) {
             if (code == KeyEvent.VK_UP || code == KeyEvent.VK_W) {
@@ -104,6 +108,10 @@ public class KeyHandler implements KeyListener {
             }
             if (code == KeyEvent.VK_ESCAPE) {
                 gp.gameState = GameState.MENU;
+            }
+        } else if (gp.gameState == GameState.INFOR) {
+            if (code == KeyEvent.VK_ESCAPE) {
+                gp.gameState = GameState.PAUSE;
             }
         }
     }

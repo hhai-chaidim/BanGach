@@ -153,10 +153,6 @@ public class LevelState {
             case 13:
                 gp.setLevel(14);
                 break;
-            case 14:
-                gp.gameState = GameState.MENU;
-                break;
-
         }
     }
     public static void draw(Graphics2D g2) {
