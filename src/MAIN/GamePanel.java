@@ -3,12 +3,10 @@ package MAIN;
 import ENTITY.Ball;
 import ENTITY.Brick;
 import ENTITY.Player;
-import GAMESTATE.MenuState;
-import GAMESTATE.PauseState;
+import GAMESTATE.*;
 import OBJECTS.OBJ_Heart;
 import OBJECTS.OBJ_Item;
 import TILE.TileManager;
-import GAMESTATE.GameState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,13 +24,21 @@ public class GamePanel extends JPanel implements Runnable {
     public final int screenHeight = tileSize * maxScreenRow;
     public PauseState pause = new PauseState(this);
     public MenuState menu = new MenuState(this);
+    public LevelState level = new LevelState(this);
+    public InforState infor = new InforState(this);
+
+    public float musicVolume = 0.2f;
+    public float soundEffectVolume = 0.2f;
+    private final float VOLUME_STEP = 0.2f;
+    private final float MAX_VOLUME = 1.0f;
+    private final float MIN_VOLUME = 0.0f;
 
     int FPS = 60;
 
     public GameState gameState = GameState.PLAYING;
     TileManager tileManager = new TileManager(this);
     public KeyHandler keyHandler = new KeyHandler(this);
-    Sound sound = new Sound();
+    public Sound sound = new Sound();
 
     Thread gameThread = new Thread(this);
     Player player = new Player(this, keyHandler);
@@ -174,6 +180,12 @@ public class GamePanel extends JPanel implements Runnable {
                 case GAME_OVER:
                     pause.draw(g2);
                 break;
+                case LEVEL:
+                    level.draw(g2);
+                    break;
+                case INFOR:
+                    infor.draw(g2);
+                    break;
                 default:
                 break;
 
@@ -253,12 +265,6 @@ public class GamePanel extends JPanel implements Runnable {
         repaint();
     }
 
-    public void playMusic(int i) {
-        sound.setFile(i);
-        sound.play();
-        sound.loop();
-    }
-
     public void stopMusic() {
         for(int i = 0; i <= 4; i++){
             sound.setFile(i);
@@ -268,6 +274,44 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void playSE(int i) {
         sound.setFile(i);
+        sound.setVolume(soundEffectVolume);
         sound.play();
+    }
+
+    public void setLevel(int i) {
+        Brick.brickLevel = i;
+        bricks.clear();
+        bricks = Brick.createBricks();
+        for(Ball ball : balls) {
+            ball.bricks = bricks;
+        }
+    }
+
+    public void increaseMusicVolume() {
+        if (musicVolume < MAX_VOLUME) {
+            musicVolume = Math.min(MAX_VOLUME, musicVolume + VOLUME_STEP);
+            System.out.println("Music Volume: " + (int)(musicVolume * 100) + "%");
+        }
+    }
+
+    public void decreaseMusicVolume() {
+        if (musicVolume > MIN_VOLUME) {
+            musicVolume = Math.max(MIN_VOLUME, musicVolume - VOLUME_STEP);
+            System.out.println("Music Volume: " + (int)(musicVolume * 100) + "%");
+        }
+    }
+
+    public void increaseSoundEffectVolume() {
+        if (soundEffectVolume < MAX_VOLUME) {
+            soundEffectVolume = Math.min(MAX_VOLUME, soundEffectVolume + VOLUME_STEP);
+            System.out.println("Sound Effect Volume: " + (int)(soundEffectVolume * 100) + "%");
+        }
+    }
+
+    public void decreaseSoundEffectVolume() {
+        if (soundEffectVolume > MIN_VOLUME) {
+            soundEffectVolume = Math.max(MIN_VOLUME, soundEffectVolume - VOLUME_STEP);
+            System.out.println("Sound Effect Volume: " + (int)(soundEffectVolume * 100) + "%");
+        }
     }
 }

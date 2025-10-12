@@ -19,7 +19,7 @@ import static java.lang.Math.max;
 public class Ball {
     GamePanel gp;
     Player player;
-    ArrayList<Brick> bricks;
+    public ArrayList<Brick> bricks;
 
     public int ballX;
     public int ballY;

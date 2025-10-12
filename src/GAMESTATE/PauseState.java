@@ -156,47 +156,61 @@ public class PauseState {
         if (gp.keyHandler.highPressed && !highPressedLastFrame) {
             if (volumeLevel < 5) {
                 volumeLevel++;
+                gp.musicVolume = volumeLevel * 0.2f;
+                gp.soundEffectVolume = volumeLevel * 0.2f;
+                gp.increaseMusicVolume();
             }
         }
 
         if (gp.keyHandler.lowPressed && !lowPressedLastFrame) {
             if (volumeLevel > 0) {
                 volumeLevel--;
+                gp.musicVolume = volumeLevel * 0.2f;
+                gp.soundEffectVolume = volumeLevel * 0.2f;
+                gp.decreaseMusicVolume();
             }
         }
         highPressedLastFrame = gp.keyHandler.highPressed;
         lowPressedLastFrame = gp.keyHandler.lowPressed;
     }
 
+    int currentVolume = volumeLevel;
+
     public void activateSelectedButton() {
         switch (selectedButton) {
-            case 0: // Restart
+            case 0:
                 gp.restart();
                 break;
-            case 1: // Sound
+            case 1:
                 try {
                     isMuted = !isMuted;
                     if (isMuted) {
                         gp.stopMusic();
                         buttonIcons[1] = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Tileset/Pause menu/Square Mute.png")));
+                        volumeLevel = 0;
+                        gp.musicVolume = 0.0f;
+                        gp.soundEffectVolume = 0.0f;
                     } else {
                         buttonIcons[1] = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Tileset/Pause menu/Square Volume.png")));
+                        volumeLevel = currentVolume;
+                        gp.musicVolume = currentVolume * 0.2f;
+                        gp.soundEffectVolume = currentVolume * 0.2f;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
-            case 2: // Home
+            case 2:
                 gp.gameState = GameState.MENU;
                 break;
-            case 3: // Settings
-                // Open settings
+            case 3:
+                gp.gameState = GameState.LEVEL;
                 break;
             case 4: // Menu
                 // Open menu
                 break;
-            case 5: // Info
-                // Show info
+            case 5:
+                gp.gameState = GameState.INFOR;
                 break;
         }
     }

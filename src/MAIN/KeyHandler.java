@@ -63,10 +63,14 @@ public class KeyHandler implements KeyListener {
             if (code == KeyEvent.VK_H) {
                 gp.playSE(4);
                 highPressed = true;
+                gp.increaseMusicVolume();
+                gp.increaseSoundEffectVolume();
             }
             if (code == KeyEvent.VK_L) {
                 gp.playSE(4);
                 lowPressed = true;
+                gp.decreaseMusicVolume();
+                gp.decreaseSoundEffectVolume();
             }
         } else if (gp.gameState == GameState.MENU) {
             if (code == KeyEvent.VK_UP || code == KeyEvent.VK_W) {
@@ -80,6 +84,34 @@ public class KeyHandler implements KeyListener {
             if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
                 gp.menu.activateSelectedButton();
                 gp.playSE(1);
+            }
+        } else if (gp.gameState == GameState.LEVEL) {
+            if (code == KeyEvent.VK_UP || code == KeyEvent.VK_W) {
+                gp.playSE(3);
+                gp.level.selectUpButton();
+            }
+            if (code == KeyEvent.VK_DOWN || code == KeyEvent.VK_S) {
+                gp.playSE(3);
+                gp.level.selectDownButton();
+            }
+            if (code == KeyEvent.VK_LEFT || code == KeyEvent.VK_A) {
+                gp.playSE(3);
+                gp.level.selectLeftButton();
+            }
+            if (code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_D) {
+                gp.playSE(3);
+                gp.level.selectRightButton();
+            }
+            if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
+                gp.level.activateSelectedButton();
+                gp.playSE(1);
+            }
+            if (code == KeyEvent.VK_ESCAPE) {
+                gp.gameState = GameState.MENU;
+            }
+        } else if (gp.gameState == GameState.INFOR) {
+            if (code == KeyEvent.VK_ESCAPE) {
+                gp.gameState = GameState.PAUSE;
             }
         }
     }

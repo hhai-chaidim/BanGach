@@ -117,7 +117,7 @@ public class MenuState {
 
                 break;
             case 2: // Setting
-
+                gp.gameState = GameState.LEVEL;
                 break;
             case 3: // Quit
                 gp.gameQuit();
