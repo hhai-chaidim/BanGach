@@ -76,7 +76,6 @@ public class OBJ_Item{
         }
     }
 
-
     public void draw(Graphics2D g2) {
         if (!objectActived) return;
 

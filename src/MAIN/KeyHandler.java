@@ -107,11 +107,15 @@ public class KeyHandler implements KeyListener {
                 gp.playSE(1);
             }
             if (code == KeyEvent.VK_ESCAPE) {
-                gp.gameState = GameState.MENU;
+                gp.gameState = GameState.PAUSE;
             }
         } else if (gp.gameState == GameState.INFOR) {
             if (code == KeyEvent.VK_ESCAPE) {
                 gp.gameState = GameState.PAUSE;
+            }
+        } else if (gp.gameState == GameState.SCORE) {
+            if (code == KeyEvent.VK_ESCAPE) {
+                gp.gameState = GameState.MENU;
             }
         }
     }

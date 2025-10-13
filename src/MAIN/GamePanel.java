@@ -10,8 +10,11 @@ import TILE.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 public class GamePanel extends JPanel implements Runnable {
     final int originalTileSize = 16;
@@ -26,12 +29,15 @@ public class GamePanel extends JPanel implements Runnable {
     public MenuState menu = new MenuState(this);
     public LevelState level = new LevelState(this);
     public InforState infor = new InforState(this);
+    public Score score = new Score(this);
 
     public float musicVolume = 0.2f;
     public float soundEffectVolume = 0.2f;
     private final float VOLUME_STEP = 0.2f;
     private final float MAX_VOLUME = 1.0f;
     private final float MIN_VOLUME = 0.0f;
+
+    private int currentScore;
 
     int FPS = 60;
 
@@ -88,6 +94,12 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
+        if(bricks.isEmpty()) {
+            Random random = new Random();
+            int randomNum = random.nextInt(14);
+            setLevel(randomNum);
+            restart();
+        }
         switch (gameState){
             case PLAYING:
             player.update();
@@ -186,6 +198,9 @@ public class GamePanel extends JPanel implements Runnable {
                 case INFOR:
                     infor.draw(g2);
                     break;
+                case SCORE:
+                    score.draw(g2);
+                    break;
                 default:
                 break;
 
@@ -197,7 +212,8 @@ public class GamePanel extends JPanel implements Runnable {
         while (iterator.hasNext()) {
             Brick brick = iterator.next();
             if (!brick.isVisible()) {
-                if (Math.random() < 0.9) {
+                currentScore++;
+                if (Math.random() < 0.2) {
                     int itemX = brick.x + brick.width / 2;
                     int itemY = brick.y + brick.height / 2;
 
@@ -206,6 +222,8 @@ public class GamePanel extends JPanel implements Runnable {
                     items.add(newItem);
                 }
                 iterator.remove();
+                score.saveScore(currentScore);
+                score.saveHighScore(currentScore);
             }
         }
     }
@@ -252,7 +270,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.gameState = gameState;
     }
 
-        public void restart() {
+    public void restart() {
         gameState = GameState.PLAYING;
         balls.clear();
         bricks.clear();
@@ -314,4 +332,5 @@ public class GamePanel extends JPanel implements Runnable {
             System.out.println("Sound Effect Volume: " + (int)(soundEffectVolume * 100) + "%");
         }
     }
+
 }

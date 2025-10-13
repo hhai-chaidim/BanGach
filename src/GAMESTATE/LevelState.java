@@ -56,6 +56,7 @@ public class LevelState {
         }
 
     }
+
     public void selectLeftButton() {
         if (selectedButton % 2 == 1) {
             selectedButton--;
@@ -155,6 +156,7 @@ public class LevelState {
                 break;
         }
     }
+
     public static void draw(Graphics2D g2) {
         g2.drawImage(image, 0, 0, gp.maxScreenCol * gp.tileSize, gp.maxScreenRow * gp.tileSize, null);
         drawButtons(g2);
