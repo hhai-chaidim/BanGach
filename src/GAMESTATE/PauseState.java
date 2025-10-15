@@ -128,8 +128,6 @@ public class PauseState {
         }
     }
 
-
-
     public void selectDownButton() {
         if (selectedButton < 3) {
             selectedButton += 3;
@@ -152,6 +150,7 @@ public class PauseState {
         int heightVolume = 64;
         g2.drawImage(volumeButton[volumeLevel], x, y, widthVolume, heightVolume, null);
     }
+
     private static void updateVolumeLevel() {
         if (gp.keyHandler.highPressed && !highPressedLastFrame) {
             if (volumeLevel < 5) {
@@ -206,8 +205,8 @@ public class PauseState {
             case 3:
                 gp.gameState = GameState.LEVEL;
                 break;
-            case 4: // Menu
-                // Open menu
+            case 4:
+                gp.gameState = GameState.LEVEL;
                 break;
             case 5:
                 gp.gameState = GameState.INFOR;
