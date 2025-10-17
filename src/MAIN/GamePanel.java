@@ -213,6 +213,7 @@ public class GamePanel extends JPanel implements Runnable {
             Brick brick = iterator.next();
             if (!brick.isVisible()) {
                 currentScore++;
+                System.out.println(currentScore);
                 if (Math.random() < 0.2) {
                     int itemX = brick.x + brick.width / 2;
                     int itemY = brick.y + brick.height / 2;
@@ -222,8 +223,9 @@ public class GamePanel extends JPanel implements Runnable {
                     items.add(newItem);
                 }
                 iterator.remove();
-                score.saveScore(currentScore);
-                score.saveHighScore(currentScore);
+                if (currentScore > score.loadScore()) {
+                    score.saveHighScore(currentScore);
+                }
             }
         }
     }

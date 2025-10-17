@@ -26,18 +26,17 @@ public class Score {
     }
 
     public void saveScore(int score) {
-        try (PrintWriter writer = new PrintWriter("/Score.txt")) {
-            writer.println(score);
-        } catch (FileNotFoundException e) {
+        try (FileWriter writer = new FileWriter("src/GAMESTATE/Score.txt")) {
+            writer.write(String.valueOf(score));
+        } catch (IOException e) {
             e.getMessage();
         }
     }
 
     public int loadScore() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("/Score.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/GAMESTATE/Score.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                System.out.println(line);
                 int score = Integer.parseInt(line);
                 return score;
             }
