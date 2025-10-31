@@ -53,7 +53,6 @@ public class GamePanel extends JPanel implements Runnable {
     public ArrayList<Ball> balls = new ArrayList<>();
 
     OBJ_Heart objHeart = new OBJ_Heart(this, player);
-    public AssetSetter assetSetter = new AssetSetter(this);
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -64,7 +63,6 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void setupGame() {
-        assetSetter.setObject();
         Ball initialBall = new Ball(this, player, bricks);
         balls.add(initialBall);
     }
