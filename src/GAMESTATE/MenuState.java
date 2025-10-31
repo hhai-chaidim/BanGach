@@ -114,7 +114,7 @@ public class MenuState {
                 gp.gameState = GameState.PLAYING;
                 break;
             case 1: // Score
-
+                gp.gameState = GameState.SCORE;
                 break;
             case 2: // Setting
                 gp.gameState = GameState.LEVEL;
