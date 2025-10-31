@@ -1,5 +1,6 @@
 package GAMESTATE;
 
+import ENTITY.Ball;
 import ENTITY.Brick;
 import MAIN.GamePanel;
 
@@ -112,11 +113,9 @@ public class LevelState {
         switch (selectedButton) {
             case 0:
                 gp.setLevel(1);
-                System.out.println("set level 1");
                 break;
             case 1:
                 gp.setLevel(2);
-                System.out.println("set level 2");
                 break;
             case 2:
                 gp.setLevel(3);
@@ -158,7 +157,10 @@ public class LevelState {
     }
 
     public static void draw(Graphics2D g2) {
+        g2.setFont(new Font("Arial", Font.BOLD, 50));
+        g2.setColor(Color.WHITE);
         g2.drawImage(image, 0, 0, gp.maxScreenCol * gp.tileSize, gp.maxScreenRow * gp.tileSize, null);
+        g2.drawString("Press ESC to return", 60, 740);
         drawButtons(g2);
         drawButtonHighlight(g2);
     }

@@ -9,7 +9,7 @@ public class KeyHandler implements KeyListener {
     GamePanel gp;
     public boolean leftPressed, rightPressed, spacePressed, pButtonPressed;
     public boolean highPressed, lowPressed;
-
+    public boolean pauseState;
     public KeyHandler(GamePanel gp) {
         this.gp = gp;
     }
@@ -35,11 +35,14 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_P) {
             if(gp.gameState.equals(GameState.PLAYING)) {
                 gp.gameState = GameState.PAUSE;
+                pauseState = true;
             } else if (gp.gameState.equals(GameState.PAUSE)) {
                 gp.gameState = GameState.PLAYING;
+                pauseState = false;
             }
         }
         if (gp.gameState == GameState.PAUSE || gp.gameState == GameState.GAME_OVER) {
+            pauseState = true;
             if (code == KeyEvent.VK_UP || code == KeyEvent.VK_W) {
                 gp.playSE(3);
                 gp.pause.selectUpButton();
@@ -73,6 +76,7 @@ public class KeyHandler implements KeyListener {
                 gp.decreaseSoundEffectVolume();
             }
         } else if (gp.gameState == GameState.MENU) {
+            pauseState = false;
             if (code == KeyEvent.VK_UP || code == KeyEvent.VK_W) {
                 gp.playSE(3);
                 gp.menu.selectUpButton();
@@ -107,15 +111,26 @@ public class KeyHandler implements KeyListener {
                 gp.playSE(1);
             }
             if (code == KeyEvent.VK_ESCAPE) {
-                gp.gameState = GameState.PAUSE;
+                if (pauseState) {
+                    gp.gameState = GameState.PAUSE;
+                } else {
+                    gp.gameState = GameState.MENU;
+                    pauseState = false;
+                }
             }
         } else if (gp.gameState == GameState.INFOR) {
             if (code == KeyEvent.VK_ESCAPE) {
                 gp.gameState = GameState.PAUSE;
+                pauseState = true;
             }
         } else if (gp.gameState == GameState.SCORE) {
             if (code == KeyEvent.VK_ESCAPE) {
-                gp.gameState = GameState.MENU;
+                if (pauseState) {
+                    gp.gameState = GameState.PAUSE;
+                } else {
+                    gp.gameState = GameState.MENU;
+                    pauseState = false;
+                }
             }
         }
     }

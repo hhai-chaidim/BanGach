@@ -26,10 +26,11 @@ public class InforState {
 
     public void draw(Graphics2D g2) {
         g2.drawImage(image, 0, 0, gp.maxScreenCol * gp.tileSize, gp.maxScreenRow * gp.tileSize, null);
-        g2.setFont(new Font("Arial", Font.BOLD, 48));
+        g2.setFont(new Font("Arial", Font.BOLD, 50));
         g2.setColor(Color.BLACK);
         g2.drawString("Hieu Ngu", 100, 100);
         g2.drawString("Duc Ngu", 100, 200);
         g2.drawString("Duy Ngu", 100, 300);
+        g2.drawString("Press ESC to return", 60, 740);
     }
 }

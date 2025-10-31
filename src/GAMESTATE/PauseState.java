@@ -58,6 +58,9 @@ public class PauseState {
     public static void draw(Graphics2D g2) {
         g2.drawImage(image, 0, 0, gp.maxScreenCol * gp.tileSize, gp.maxScreenRow * gp.tileSize, null);
         g2.drawImage(image2, 80 * 2 + 25, 32 * 3, 416 / 2, 128 / 2, null);
+        g2.setFont(new Font("Arial", Font.BOLD, 50));
+        g2.setColor(Color.WHITE);
+        g2.drawString("Press P to resume", 90, 740);
         switch (gp.gameState){
             case PAUSE:
                 g2.drawImage(pauseMenuImage, 0, 12 * 16, gp.maxScreenCol * gp.tileSize, 26 * 16, null);
@@ -206,7 +209,7 @@ public class PauseState {
                 gp.gameState = GameState.LEVEL;
                 break;
             case 4:
-                gp.gameState = GameState.LEVEL;
+                gp.gameState = GameState.SCORE;
                 break;
             case 5:
                 gp.gameState = GameState.INFOR;
