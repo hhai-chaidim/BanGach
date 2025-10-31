@@ -50,6 +50,9 @@ public class MenuState {
     public static void draw(Graphics2D g2) {
         g2.drawImage(image, 0, 0, gp.maxScreenCol * gp.tileSize, gp.maxScreenRow * gp.tileSize, null);
         g2.drawImage(gameName, 57 * gp.tileSize / 20, gp.tileSize / 2, 333, 97, null);
+        g2.setFont(new Font("Arial", Font.BOLD, 20));
+        g2.setColor(Color.WHITE);
+        g2.drawString("HoangHai|HongDuy|TrungHieu", 280, 750);
         drawButtons(g2);
         drawButtonHighlight(g2);
     }
