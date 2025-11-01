@@ -83,6 +83,12 @@ public class KeyHandler implements KeyListener {
                 gp.decreaseMusicVolume();
                 gp.decreaseSoundEffectVolume();
             }
+            if (gp.gameState == GameState.GAME_OVER) {
+                if (code == KeyEvent.VK_ESCAPE) {
+                    gp.gameState = GameState.MENU;
+                    pauseState = false;
+                }
+            }
         } else if (gp.gameState == GameState.MENU) {
             pauseState = false;
             if (code == KeyEvent.VK_UP || code == KeyEvent.VK_W) {

@@ -36,7 +36,7 @@ public class PauseState {
         try {
             image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Background/test.jpg")));
             image2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Tileset/Pause menu/Pauseee.png")));
-            image3 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Tileset/Pause menu/Pauseee.png")));
+            image3 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Tileset/Pause menu/Game Over.png")));
             pauseMenuImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Tileset/Pause menu/Large Rectangle.png")));
             buttonIcons = new BufferedImage[6];
             buttonIcons[0] = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Tileset/Pause menu/Square Replay.png")));
@@ -74,6 +74,7 @@ public class PauseState {
             case GAME_OVER:
                 g2.drawImage(image3, 80 * 2 + 25, 32 * 3, 416 / 2, 128 / 2, null);
                 g2.drawImage(pauseMenuImage, 0, 12 * 16, gp.maxScreenCol * gp.tileSize, 26 * 16, null);
+                g2.drawString("Press ESC to exit", 90, 740);
                 drawButtons(g2);
                 drawButtonHighlight(g2);
                 updateVolumeLevel();
