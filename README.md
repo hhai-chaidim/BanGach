@@ -60,8 +60,6 @@ javac -d bin src/*.java
 java -cp bin Main
 ```
 
-*(Replace `Main` with the actual main class if different, e.g., `GameFrame` or `BanGachGame`)*
-
 ---
 
 ## Controls
