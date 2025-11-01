@@ -69,7 +69,8 @@ java -cp bin Main
 | Key | Action |
 |-----|---------|
 | A / D | Move paddle left or right |
-| Space | Start / Restart the game |
+| Space | Start |
+| P | Pause |
 | Esc | Exit |
 
 
