@@ -71,6 +71,7 @@ java -cp bin Main
 | A / D | Move paddle left or right |
 | Space | Start |
 | P | Pause |
+| ←,↑,↓,→ | Change option |
 | Esc | Exit |
 
 
