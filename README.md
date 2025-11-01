@@ -73,11 +73,6 @@ java -cp bin Main
 | Space | Start / Restart the game |
 | Esc | Exit |
 
----
-
-## License
-
-This project is open-source and available under the [MIT License](LICENSE).
 
 ---
 
