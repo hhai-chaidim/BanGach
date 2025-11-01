@@ -59,8 +59,9 @@ public class PauseState {
 
     public static void draw(Graphics2D g2) {
         g2.drawImage(image, 0, 0, gp.maxScreenCol * gp.tileSize, gp.maxScreenRow * gp.tileSize, null);
-        g2.setFont(new Font("Arial", Font.BOLD, 50));
+        g2.setFont(new Font("Arial", Font.BOLD, 30));
         g2.setColor(Color.WHITE);
+        g2.drawString("Press L - H to change the volume", 30, 690);
         switch (gp.gameState){
             case PAUSE:
                 g2.drawImage(image2, 80 * 2 + 25, 32 * 3, 416 / 2, 128 / 2, null);
