@@ -167,7 +167,8 @@ public class GamePanel extends JPanel implements Runnable {
         switch (gameState){
             case PLAYING:
                 tileManager.draw(g2);
-
+                g2.setFont(new Font("Arial", Font.BOLD, 30));
+                g2.drawString("Score: " + currentScore, screenWidth - 150, 30);
                 player.draw(g2);
                 for(Ball ball : balls) {
                     ball.draw(g2);
