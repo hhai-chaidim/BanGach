@@ -15,7 +15,6 @@ _A simple brick-breaking game built with Java_
   - [Installation](#installation)
   - [Usage](#usage)
 - [Controls](#controls)
-- [License](#license)
 
 ---
 
