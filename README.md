@@ -60,8 +60,6 @@ javac -d bin src/*.java
 java -cp bin Main
 ```
 
-*(Replace `Main` with the actual main class if different, e.g., `GameFrame` or `BanGachGame`)*
-
 ---
 
 ## Controls
@@ -69,7 +67,9 @@ java -cp bin Main
 | Key | Action |
 |-----|---------|
 | A / D | Move paddle left or right |
-| Space | Start / Restart the game |
+| Space | Start |
+| P | Pause |
+| ←,↑,↓,→ | Change option |
 | Esc | Exit |
 
 
