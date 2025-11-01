@@ -55,9 +55,11 @@ public class Score {
 
     public void draw(Graphics2D g2) {
         g2.drawImage(image, 0, 0, gp.maxScreenCol * gp.tileSize, gp.maxScreenRow * gp.tileSize, null);
-        g2.setFont(new Font("Arial", Font.BOLD, 20));
+        g2.setFont(new Font("Arial", Font.BOLD, 50));
         g2.setColor(Color.WHITE);
-        g2.drawString("Score: " + formatNumber(loadScore()), 100, 100);
+        g2.drawString("High Score: " + formatNumber(loadScore()), 130, 390);
+        g2.drawString("Try your best!!!", 115, 450 );
+        g2.drawString("Press ESC to return", 60, 740);
     }
 
     private String formatNumber(int num) {
